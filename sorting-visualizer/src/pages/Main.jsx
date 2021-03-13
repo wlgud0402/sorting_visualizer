@@ -1,19 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
-const Main = (arr) => {
+const Main = ({ arr, currentIdx }) => {
   const screen = window.screen;
-  const barHeightProPortion = 430 / arr.data.length;
-  const barWidth = screen.width / arr.data.length;
+  const barHeightProPortion = 430 / arr.length;
+  const barWidth = screen.width / arr.length;
   return (
     <Container>
       <BlockContinaer>
-        {arr.data.map((size) => {
+        {arr.map((size, i) => {
           return (
             <Bar
               key={size}
               height={`${size * barHeightProPortion}px`}
               width={`${barWidth}px`}
+              active={currentIdx === i}
             />
           );
         })}
@@ -46,7 +47,7 @@ const Bar = styled.div`
   justify-content: center;
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  background-color: ${(props) => props.color || "#b36c2f"};
+  background-color: ${(props) => (props.active ? "#b50002" : "#b36c2f")};
   margin-right: 2px;
 `;
 

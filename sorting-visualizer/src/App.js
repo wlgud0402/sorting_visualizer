@@ -3,11 +3,13 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import Main from "./pages/Main";
 import { bubbleSort } from "./sortingAlgorithms/bubbleSort.js";
+import { sleep } from "./helper/sleep.js";
 
 function App() {
   const [size, setSize] = useState(10);
   const [arr, setArr] = useState([]);
   const [choosedSize, setChoosedSize] = useState(10);
+  const [currentIdx, setCurrentIdx] = useState(null);
 
   //페이지가 랜더링 될때 처음 실행됨
   useEffect(() => {
@@ -50,11 +52,18 @@ function App() {
     setArr(array);
   };
 
-  const onBubbleSort = () => {
-    const sortedArr = bubbleSort(arr);
-    const newArr = [...sortedArr];
-    setArr(newArr);
+  const onBubbleSort = async () => {
+    for (let i = 0; i < arr.length; i++) {
+      await sleep(1000);
+      setCurrentIdx(i);
+    }
   };
+
+  // const onBubbleSort = () => {
+  //   const sortedArr = bubbleSort(arr);
+  //   const newArr = [...sortedArr];
+  //   setArr(newArr);
+  // };
 
   return (
     <div className="App">
@@ -63,7 +72,7 @@ function App() {
         makeRandomArray={makeRandomArray}
         onBubbleClick={onBubbleSort}
       />
-      <Main data={arr} />
+      <Main arr={arr} currentIdx={currentIdx} />
     </div>
   );
 }

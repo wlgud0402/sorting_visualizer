@@ -6,7 +6,13 @@ import styled from "styled-components";
 // import { makeStyles } from "@material-ui/core/styles";
 // import Typography from "@material-ui/core/Typography";
 
-const Header = ({ rangeChange, makeRandomArray, onBubbleClick }) => {
+const Header = ({
+  rangeChange,
+  makeRandomArray,
+  onBubbleClick,
+  onMergeClick,
+  onQuickClick,
+}) => {
   //   const [showModal, hideModal] = useModal(() => (
   //     <RangeModal hideModal={hideModal} />
   //   ));
@@ -17,22 +23,10 @@ const Header = ({ rangeChange, makeRandomArray, onBubbleClick }) => {
       <Title>Sorting Visualization</Title>
       <Button onClick={makeRandomArray}>새 배열</Button>
       <Button onClick={rangeChange}>범위 선택</Button>
-      <Button>Merge Sort</Button>
-      <Button>Quick Sort</Button>
+      <Button onClick={onMergeClick}>Merge Sort</Button>
+      <Button onClick={onQuickClick}>Quick Sort</Button>
       <Button>Heap Sort</Button>
       <Button onClick={onBubbleClick}>Bubble Sort</Button>
-
-      {/* <div>
-        <Title>Sorting Visualization</Title>
-      </div>
-      <Button onClick={() => console.log("cliken")}>새로운 배열 생성</Button>
-      <Button onClick={rangeChange}>범위선택</Button>
-      <SortWrapper>
-        <Button onClick={() => console.log("cliken")}>Merge Sort</Button>
-        <Button onClick={() => console.log("cliken")}>Quick Sort</Button>
-        <Button onClick={() => console.log("cliken")}>Heap Sort</Button>
-        <Button onClick={() => console.log("cliken")}>Bubble Sort</Button>
-      </SortWrapper> */}
     </Wrapper>
     // <Button onClick={showModal}>범위선택</Button>
     // <RangeWrapper>
@@ -73,13 +67,6 @@ const Wrapper = styled.div`
   box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.33);
   /* padding-left: 25px;
   padding-right: 25px; */
-`;
-
-const SortWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-  justify-content: space-evenly;
 `;
 
 const RangeWrapper = styled.div`

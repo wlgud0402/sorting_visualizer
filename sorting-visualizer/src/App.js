@@ -2,18 +2,23 @@ import Header from "./components/Header";
 import { useState, useEffect } from "react";
 import "./App.css";
 import Main from "./pages/Main";
-import { bubbleSort } from "./sortingAlgorithms/bubbleSort.js";
+// import { bubbleSort } from "./sortingAlgorithms/bubbleSort.js";
+// import { mergeSort } from "./sortingAlgorithms/mergeSort.js";
+import { quickSort } from "./sortingAlgorithms/quickSort.js";
+
 import { sleep } from "./helper/sleep.js";
 
 function App() {
-  const [size, setSize] = useState(10);
+  const firstSize = 10;
   const [arr, setArr] = useState([]);
   const [choosedSize, setChoosedSize] = useState(10);
+
   const [currentIdx, setCurrentIdx] = useState(null);
+  const [nextIdx, setNextIdx] = useState(null);
 
   //페이지가 랜더링 될때 처음 실행됨
   useEffect(() => {
-    makeArray(size);
+    makeArray(firstSize);
   }, []);
 
   //선택된 범위를 재사용해서 새로 다시 섞인 배열 생성
@@ -52,18 +57,62 @@ function App() {
     setArr(array);
   };
 
+  //BubbleSort
   const onBubbleSort = async () => {
-    for (let i = 0; i < arr.length; i++) {
-      await sleep(1000);
+    const len = arr.length;
+    for (let i = 0; i < len; i++) {
       setCurrentIdx(i);
+      console.log(i);
+      for (let j = 0; j < len; j++) {
+        // setNextIdx(i + 1);
+        if (arr[j] > arr[j + 1]) {
+          let tmp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = tmp;
+          setArr([...arr]);
+        }
+      }
+      await sleep(100);
     }
+    setCurrentIdx(null);
   };
 
-  // const onBubbleSort = () => {
-  //   const sortedArr = bubbleSort(arr);
-  //   const newArr = [...sortedArr];
-  //   setArr(newArr);
-  // };
+  //MergeSort
+  const mergeSort = async (array) => {
+    if (array.length === 1) return array;
+
+    const middleIdx = Math.floor(array.length / 2);
+    const leftHalf = await mergeSort(array.slice(0, middleIdx));
+    console.log("leftHalf", leftHalf);
+    const rightHalf = await mergeSort(array.slice(middleIdx));
+    const sortedArray = [];
+
+    let i = 0;
+    let j = 0;
+
+    while (i < leftHalf.length && j < rightHalf.length) {
+      if (leftHalf[i] < rightHalf[j]) {
+        sortedArray.push(leftHalf[i++]);
+      } else {
+        sortedArray.push(rightHalf[j++]);
+      }
+    }
+    while (i < leftHalf.length) sortedArray.push(leftHalf[i++]);
+    while (j < rightHalf.length) sortedArray.push(rightHalf[j++]);
+
+    console.log("솔로로로로롤", sortedArray);
+    return sortedArray;
+  };
+
+  const onMergeSort = async () => {
+    mergeSort(arr);
+    console.log("실행", arr);
+  };
+
+  const onQuickSort = () => {
+    quickSort(arr, 0, arr.length - 1);
+    console.log("퀵소트", arr);
+  };
 
   return (
     <div className="App">
@@ -71,8 +120,10 @@ function App() {
         rangeChange={rangeChange}
         makeRandomArray={makeRandomArray}
         onBubbleClick={onBubbleSort}
+        onMergeClick={onMergeSort}
+        onQuickClick={onQuickSort}
       />
-      <Main arr={arr} currentIdx={currentIdx} />
+      <Main arr={arr} currentIdx={currentIdx} nextIdx={nextIdx} />
     </div>
   );
 }

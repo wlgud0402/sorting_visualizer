@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Main = ({ arr, currentIdx }) => {
+const Main = ({ arr, currentIdx, nextIdx }) => {
   const screen = window.screen;
   const barHeightProPortion = 430 / arr.length;
   const barWidth = screen.width / arr.length;
@@ -9,12 +9,14 @@ const Main = ({ arr, currentIdx }) => {
     <Container>
       <BlockContinaer>
         {arr.map((size, i) => {
+          // console.log(size, i);
           return (
             <Bar
               key={size}
               height={`${size * barHeightProPortion}px`}
               width={`${barWidth}px`}
-              active={currentIdx === i}
+              // active={currentIdx === i}
+              // nextIdx={nextIdx === size}
             />
           );
         })}
@@ -48,6 +50,7 @@ const Bar = styled.div`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   background-color: ${(props) => (props.active ? "#b50002" : "#b36c2f")};
+  /* background-color: ${(props) => (props.nextIdx ? "#b50002" : "#b36c2f")}; */
   margin-right: 2px;
 `;
 

@@ -2,19 +2,33 @@ import Header from "./components/Header";
 import { useState, useEffect } from "react";
 import "./App.css";
 import Main from "./pages/Main";
-// import { bubbleSort } from "./sortingAlgorithms/bubbleSort.js";
-// import { mergeSort } from "./sortingAlgorithms/mergeSort.js";
-import { quickSort } from "./sortingAlgorithms/quickSort.js";
+import { getBubbleSort } from "./sortingAlgorithms/bubbleSort.js";
+import { getMergeSort } from "./sortingAlgorithms/mergeSort.js";
 
-import { sleep } from "./helper/sleep.js";
+// import { mergeSort } from "./sortingAlgorithms/mergeSort.js";
+// import { quickSort } from "./sortingAlgorithms/quickSort.js";
+
+// import { sleep } from "./helper/sleep.js";
 
 function App() {
+  const ANIMATION_SPEED_MS = 4;
+  //바의 갯수
+  // const NUMBER_OF_ARRAY_BARS = 310;
+  //바의 메인컬러
+  const PRIMARY_COLOR = "turquoise";
+  //변하는 바의 색깔
+  const SECONDARY_COLOR = "red";
+
   const firstSize = 10;
   const [arr, setArr] = useState([]);
   const [choosedSize, setChoosedSize] = useState(10);
 
   const [currentIdx, setCurrentIdx] = useState(null);
   const [nextIdx, setNextIdx] = useState(null);
+
+  const screen = window.screen;
+  const barHeightProPortion = (screen.height * 0.7) / arr.length;
+  // const barHeightProPortion = 430 / arr.length;
 
   //페이지가 랜더링 될때 처음 실행됨
   useEffect(() => {
@@ -24,6 +38,12 @@ function App() {
   //선택된 범위를 재사용해서 새로 다시 섞인 배열 생성
   const makeRandomArray = () => {
     makeArray(choosedSize);
+  };
+
+  const test = () => {
+    const testBundle = arr.slice();
+    console.log("오리지날", arr);
+    console.log("testBundle", testBundle);
   };
 
   //범위를 선택후 이를 적용시킴
@@ -37,6 +57,14 @@ function App() {
       makeArray(10);
       return;
     }
+  };
+
+  const setOrderedArray = () => {
+    let pureArray = [];
+    for (let i = 1; i <= choosedSize; i++) {
+      pureArray.push(i);
+    }
+    console.log(pureArray);
   };
 
   //범위를 입력받은후 그만큼 크기의 배열생성, 섞기위해 shuffleArray 호출
@@ -59,58 +87,59 @@ function App() {
 
   //BubbleSort
   const onBubbleSort = async () => {
-    const len = arr.length;
-    for (let i = 0; i < len; i++) {
-      setCurrentIdx(i);
-      console.log(i);
-      for (let j = 0; j < len; j++) {
-        // setNextIdx(i + 1);
-        if (arr[j] > arr[j + 1]) {
-          let tmp = arr[j];
-          arr[j] = arr[j + 1];
-          arr[j + 1] = tmp;
-          setArr([...arr]);
+    let [animations, randomValue] = getBubbleSort(arr);
+    for (let i = 0; i < animations.length; i++) {
+      const isColorChange = i % 4 === 0 || i % 4 === 1;
+      const arrayBars = document.getElementsByClassName("array-bar");
+      if (isColorChange === true) {
+        const color = i % 4 === 0 ? "red" : "turquoise";
+        const [barOneIdx, barTwoIdx] = animations[i];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * ANIMATION_SPEED_MS);
+      } else {
+        const [barIdx, newHeight] = animations[i];
+        if (barIdx === -1) {
+          continue;
         }
+        const barStyle = arrayBars[barIdx].style;
+        setTimeout(() => {
+          barStyle.height = `${newHeight * barHeightProPortion}px`;
+        }, i * ANIMATION_SPEED_MS);
       }
-      await sleep(100);
     }
-    setCurrentIdx(null);
   };
 
   //MergeSort
-  const mergeSort = async (array) => {
-    if (array.length === 1) return array;
-
-    const middleIdx = Math.floor(array.length / 2);
-    const leftHalf = await mergeSort(array.slice(0, middleIdx));
-    console.log("leftHalf", leftHalf);
-    const rightHalf = await mergeSort(array.slice(middleIdx));
-    const sortedArray = [];
-
-    let i = 0;
-    let j = 0;
-
-    while (i < leftHalf.length && j < rightHalf.length) {
-      if (leftHalf[i] < rightHalf[j]) {
-        sortedArray.push(leftHalf[i++]);
+  const onMergeSort = async (array) => {
+    const animations = getMergeSort(arr);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName("array-bar");
+      const isColorChange = i % 3 !== 2;
+      if (isColorChange) {
+        const [barOneIdx, barTwoIdx] = animations[i];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * ANIMATION_SPEED_MS);
       } else {
-        sortedArray.push(rightHalf[j++]);
+        setTimeout(() => {
+          const [barOneIdx, newHeight] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          // barStyle.height = `${newHeight * barHeightProPortion}px`;
+          barOneStyle.height = `${newHeight * barHeightProPortion}px`;
+        }, i * ANIMATION_SPEED_MS);
       }
     }
-    while (i < leftHalf.length) sortedArray.push(leftHalf[i++]);
-    while (j < rightHalf.length) sortedArray.push(rightHalf[j++]);
-
-    console.log("솔로로로로롤", sortedArray);
-    return sortedArray;
-  };
-
-  const onMergeSort = async () => {
-    mergeSort(arr);
-    console.log("실행", arr);
   };
 
   const onQuickSort = () => {
-    quickSort(arr, 0, arr.length - 1);
     console.log("퀵소트", arr);
   };
 
@@ -122,6 +151,7 @@ function App() {
         onBubbleClick={onBubbleSort}
         onMergeClick={onMergeSort}
         onQuickClick={onQuickSort}
+        onTestClick={test}
       />
       <Main arr={arr} currentIdx={currentIdx} nextIdx={nextIdx} />
     </div>

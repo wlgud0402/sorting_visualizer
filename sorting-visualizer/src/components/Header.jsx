@@ -12,6 +12,7 @@ const Header = ({
   onBubbleClick,
   onMergeClick,
   onQuickClick,
+  onTestClick,
 }) => {
   //   const [showModal, hideModal] = useModal(() => (
   //     <RangeModal hideModal={hideModal} />
@@ -26,6 +27,7 @@ const Header = ({
       <Button onClick={onMergeClick}>Merge Sort</Button>
       <Button onClick={onQuickClick}>Quick Sort</Button>
       <Button>Heap Sort</Button>
+      <Button onClick={onTestClick}>테스트</Button>
       <Button onClick={onBubbleClick}>Bubble Sort</Button>
     </Wrapper>
     // <Button onClick={showModal}>범위선택</Button>

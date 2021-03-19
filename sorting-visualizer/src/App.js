@@ -4,6 +4,8 @@ import "./App.css";
 import Main from "./pages/Main";
 import { getBubbleSort } from "./sortingAlgorithms/bubbleSort.js";
 import { getMergeSort } from "./sortingAlgorithms/mergeSort.js";
+import { getSelectionSort } from "./sortingAlgorithms/selectionSort.js";
+import { getInsertionSort } from "./sortingAlgorithms/insertionSort.js";
 
 // import { mergeSort } from "./sortingAlgorithms/mergeSort.js";
 // import { quickSort } from "./sortingAlgorithms/quickSort.js";
@@ -11,7 +13,7 @@ import { getMergeSort } from "./sortingAlgorithms/mergeSort.js";
 // import { sleep } from "./helper/sleep.js";
 
 function App() {
-  const ANIMATION_SPEED_MS = 4;
+  const ANIMATION_SPEED_MS = 100;
   //바의 갯수
   // const NUMBER_OF_ARRAY_BARS = 310;
   //바의 메인컬러
@@ -85,9 +87,10 @@ function App() {
     setArr(array);
   };
 
-  //BubbleSort
+  //거품정렬
   const onBubbleSort = async () => {
     let [animations, randomValue] = getBubbleSort(arr);
+    console.log("버블버블", animations);
     for (let i = 0; i < animations.length; i++) {
       const isColorChange = i % 4 === 0 || i % 4 === 1;
       const arrayBars = document.getElementsByClassName("array-bar");
@@ -113,9 +116,10 @@ function App() {
     }
   };
 
-  //MergeSort
+  //병합정렬
   const onMergeSort = async (array) => {
     const animations = getMergeSort(arr);
+    console.log(animations);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
       const isColorChange = i % 3 !== 2;
@@ -139,6 +143,57 @@ function App() {
     }
   };
 
+  //선택정렬
+  const onSelectionSort = async () => {
+    let [animations, afterSortedArray] = getSelectionSort(arr);
+    console.log(animations, afterSortedArray);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName("array-bar");
+      if (animations[i][2] === "changed") {
+        setTimeout(() => {
+          const [barOneIdx, newHeight] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          barOneStyle.height = `${newHeight * barHeightProPortion}px`;
+        }, i * ANIMATION_SPEED_MS);
+      } else {
+        const [barOneIdx, barTwoIdx] = animations[i];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        const color =
+          animations[i][2] === "same" ? SECONDARY_COLOR : PRIMARY_COLOR;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * ANIMATION_SPEED_MS);
+      }
+    }
+  };
+
+  //삽입정렬
+  const onInsertionSort = () => {
+    const [animations, sortedArray] = getInsertionSort(arr);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName("array-bar");
+      if (animations[i][2] === "changed") {
+        setTimeout(() => {
+          const [barOneIdx, newHeight] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          barOneStyle.height = `${newHeight * barHeightProPortion}px`;
+        }, i * ANIMATION_SPEED_MS);
+      } else {
+        const [barOneIdx, barTwoIdx] = animations[i];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        const color =
+          animations[i][2] === "same" ? SECONDARY_COLOR : PRIMARY_COLOR;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * ANIMATION_SPEED_MS);
+      }
+    }
+  };
+
   const onQuickSort = () => {
     console.log("퀵소트", arr);
   };
@@ -151,6 +206,8 @@ function App() {
         onBubbleClick={onBubbleSort}
         onMergeClick={onMergeSort}
         onQuickClick={onQuickSort}
+        onSelectionClick={onSelectionSort}
+        onInsertionClick={onInsertionSort}
         onTestClick={test}
       />
       <Main arr={arr} currentIdx={currentIdx} nextIdx={nextIdx} />

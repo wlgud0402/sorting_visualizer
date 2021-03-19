@@ -6,6 +6,7 @@ import { getBubbleSort } from "./sortingAlgorithms/bubbleSort.js";
 import { getMergeSort } from "./sortingAlgorithms/mergeSort.js";
 import { getSelectionSort } from "./sortingAlgorithms/selectionSort.js";
 import { getInsertionSort } from "./sortingAlgorithms/insertionSort.js";
+import { getQuickSort } from "./sortingAlgorithms/quickSort.js";
 
 // import { mergeSort } from "./sortingAlgorithms/mergeSort.js";
 // import { quickSort } from "./sortingAlgorithms/quickSort.js";
@@ -13,7 +14,7 @@ import { getInsertionSort } from "./sortingAlgorithms/insertionSort.js";
 // import { sleep } from "./helper/sleep.js";
 
 function App() {
-  const ANIMATION_SPEED_MS = 100;
+  const ANIMATION_SPEED_MS = 10;
   //바의 갯수
   // const NUMBER_OF_ARRAY_BARS = 310;
   //바의 메인컬러
@@ -195,7 +196,29 @@ function App() {
   };
 
   const onQuickSort = () => {
-    console.log("퀵소트", arr);
+    console.log("퀵소트실행 이거 정렬하자", arr);
+    const [animations, sortedArr] = getQuickSort(arr);
+    console.log(animations);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName("array-bar");
+      if (animations[i][2] === "changed") {
+        setTimeout(() => {
+          const [barOneIdx, newHeight] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          barOneStyle.height = `${newHeight * barHeightProPortion}px`;
+        }, i * ANIMATION_SPEED_MS);
+      } else {
+        const [barOneIdx, barTwoIdx] = animations[i];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        const color =
+          animations[i][2] === "after" ? SECONDARY_COLOR : PRIMARY_COLOR;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * ANIMATION_SPEED_MS);
+      }
+    }
   };
 
   return (

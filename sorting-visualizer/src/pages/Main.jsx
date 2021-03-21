@@ -1,23 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 
-const Main = ({ arr, currentIdx, nextIdx }) => {
+const Main = ({ arr }) => {
   const screen = window.screen;
   const barHeightProPortion = (screen.height * 0.7) / arr.length;
   const barWidth = screen.width / arr.length;
+
   return (
     <Container>
       <BlockContinaer>
         {arr.map((size, idx) => {
-          // console.log(size, i);
           return (
             <Bar
               className="array-bar"
               key={idx}
               height={`${size * barHeightProPortion}px`}
               width={`${barWidth}px`}
-              // active={currentIdx === i}
-              // nextIdx={nextIdx === size}
             />
           );
         })}
@@ -27,26 +25,6 @@ const Main = ({ arr, currentIdx, nextIdx }) => {
         <p className="contact">contact: 010-6805-0402</p>
       </Step>
     </Container>
-
-    // <Container>
-    //   <BlockContinaer>
-    //     {arr.map((size, i) => {
-    //       // console.log(size, i);
-    //       return (
-    //         <Bar
-    //           key={size}
-    //           height={`${size * barHeightProPortion}px`}
-    //           width={`${barWidth}px`}
-    //           // active={currentIdx === i}
-    //           // nextIdx={nextIdx === size}
-    //         />
-    //       );
-    //     })}
-    //   </BlockContinaer>
-    //   <Step>
-    //     <p>jihyung.kim.dev by 2021</p>
-    //   </Step>
-    // </Container>
   );
 };
 
@@ -71,8 +49,7 @@ const Bar = styled.div`
   justify-content: center;
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  background-color: ${(props) => (props.active ? "red" : "turquoise")};
-  /* background-color: ${(props) => (props.nextIdx ? "#b50002" : "#b36c2f")}; */
+  background-color: turquoise;
   margin-right: 2px;
 `;
 

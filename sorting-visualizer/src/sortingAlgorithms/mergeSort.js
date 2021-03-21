@@ -21,7 +21,6 @@ function doMerge(mainArray, startIdx, middleIdx, endIdx, stack, animations) {
   let i = startIdx;
   let j = middleIdx + 1;
   while (i <= middleIdx && j <= endIdx) {
-    // These are the values that we're comparing;
     animations.push([i, j]); // we push them once to change their color.
     animations.push([i, j]); // we push them a second time to revert their color.
     if (stack[i] <= stack[j]) {

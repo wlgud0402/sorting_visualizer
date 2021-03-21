@@ -101,26 +101,20 @@ function QuickSort(array, left, right, animations) {
 }
 
 function divide(array, left, right, pivot, animations) {
-  console.log(
-    `array: ${array}, left: ${array[left]}, pivot: ${pivot}, right: ${array[right]}`
-  );
   while (left <= right) {
     while (array[left] < pivot) {
-      animations.push([pivot, left, "before"]);
-      console.log(left, "레프트 이동중!!!");
+      // animations.push([pivot, left, "before"]);
       left++;
       animations.push([pivot, left, "after"]);
       animations.push([pivot, left, "before"]);
     }
     while (array[right] > pivot) {
-      animations.push([pivot, right, "before"]);
-      console.log(left, "라이트 이동중!!!");
+      // animations.push([pivot, right, "before"]);
       right--;
       animations.push([pivot, right, "after"]);
       animations.push([pivot, right, "before"]);
     }
     if (left <= right) {
-      console.log("스왑됨!!!", left, right, array[left], array[right]);
       swap(array, left, right);
       animations.push([left, array[left], "changed"]);
       animations.push([right, array[right], "changed"]);

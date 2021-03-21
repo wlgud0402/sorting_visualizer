@@ -10,7 +10,7 @@ function insertionSort(stack, animations) {
   const len = stack.length;
   for (let i = 1; i < len; i++) {
     for (let j = i - 1; j > -1; j--) {
-      animations.push([i, j, "before"]);
+      animations.push([i, j, "same"]);
       animations.push([i, j, "same"]);
       animations.push([i, j, "before"]);
 
@@ -19,7 +19,9 @@ function insertionSort(stack, animations) {
         swap(stack, j + 1, j);
         animations.push([j, stack[j], "changed"]);
         animations.push([j + 1, stack[j + 1], "changed"]);
-
+        animations.push([j, j + 1, "same"]);
+        animations.push([j, j + 1, "same"]);
+        animations.push([j, j + 1, "before"]);
         //바뀌지 않는다
       }
     }

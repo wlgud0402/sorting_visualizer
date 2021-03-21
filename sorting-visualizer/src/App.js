@@ -8,45 +8,32 @@ import { getSelectionSort } from "./sortingAlgorithms/selectionSort.js";
 import { getInsertionSort } from "./sortingAlgorithms/insertionSort.js";
 import { getQuickSort } from "./sortingAlgorithms/quickSort.js";
 
-// import { mergeSort } from "./sortingAlgorithms/mergeSort.js";
-// import { quickSort } from "./sortingAlgorithms/quickSort.js";
-
-// import { sleep } from "./helper/sleep.js";
-
 function App() {
   const ANIMATION_SPEED_MS = 10;
-  //바의 갯수
-  // const NUMBER_OF_ARRAY_BARS = 310;
-  //바의 메인컬러
   const PRIMARY_COLOR = "turquoise";
-  //변하는 바의 색깔
   const SECONDARY_COLOR = "red";
+  const [nowSorting, setNowSorting] = useState("false");
 
   const firstSize = 10;
   const [arr, setArr] = useState([]);
   const [choosedSize, setChoosedSize] = useState(10);
 
-  const [currentIdx, setCurrentIdx] = useState(null);
-  const [nextIdx, setNextIdx] = useState(null);
-
   const screen = window.screen;
   const barHeightProPortion = (screen.height * 0.7) / arr.length;
-  // const barHeightProPortion = 430 / arr.length;
 
   //페이지가 랜더링 될때 처음 실행됨
   useEffect(() => {
     makeArray(firstSize);
   }, []);
 
+  useEffect(() => {
+    setNowSorting(nowSorting);
+    console.log("바뀜", nowSorting);
+  }, [nowSorting]);
+
   //선택된 범위를 재사용해서 새로 다시 섞인 배열 생성
   const makeRandomArray = () => {
     makeArray(choosedSize);
-  };
-
-  const test = () => {
-    const testBundle = arr.slice();
-    console.log("오리지날", arr);
-    console.log("testBundle", testBundle);
   };
 
   //범위를 선택후 이를 적용시킴
@@ -60,14 +47,6 @@ function App() {
       makeArray(10);
       return;
     }
-  };
-
-  const setOrderedArray = () => {
-    let pureArray = [];
-    for (let i = 1; i <= choosedSize; i++) {
-      pureArray.push(i);
-    }
-    console.log(pureArray);
   };
 
   //범위를 입력받은후 그만큼 크기의 배열생성, 섞기위해 shuffleArray 호출
@@ -90,37 +69,35 @@ function App() {
 
   //거품정렬
   const onBubbleSort = async () => {
-    let [animations, randomValue] = getBubbleSort(arr);
-    console.log("버블버블", animations);
+    console.log("솔팅시전", nowSorting);
+    setNowSorting("true");
+    console.log("솔팅시작눌렀어", nowSorting);
+    const [animations, sortedArray] = getBubbleSort(arr);
     for (let i = 0; i < animations.length; i++) {
-      const isColorChange = i % 4 === 0 || i % 4 === 1;
       const arrayBars = document.getElementsByClassName("array-bar");
-      if (isColorChange === true) {
-        const color = i % 4 === 0 ? "red" : "turquoise";
+      if (animations[i][2] === "changed") {
+        setTimeout(() => {
+          const [barOneIdx, newHeight] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          barOneStyle.height = `${newHeight * barHeightProPortion}px`;
+        }, i * ANIMATION_SPEED_MS);
+      } else {
         const [barOneIdx, barTwoIdx] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
+        const color =
+          animations[i][2] === "same" ? SECONDARY_COLOR : PRIMARY_COLOR;
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
-      } else {
-        const [barIdx, newHeight] = animations[i];
-        if (barIdx === -1) {
-          continue;
-        }
-        const barStyle = arrayBars[barIdx].style;
-        setTimeout(() => {
-          barStyle.height = `${newHeight * barHeightProPortion}px`;
         }, i * ANIMATION_SPEED_MS);
       }
     }
   };
 
   //병합정렬
-  const onMergeSort = async (array) => {
+  const onMergeSort = async () => {
     const animations = getMergeSort(arr);
-    console.log(animations);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
       const isColorChange = i % 3 !== 2;
@@ -195,29 +172,36 @@ function App() {
     }
   };
 
+  //퀵정렬
   const onQuickSort = () => {
-    console.log("퀵소트실행 이거 정렬하자", arr);
     const [animations, sortedArr] = getQuickSort(arr);
-    console.log(animations);
-    for (let i = 0; i < animations.length; i++) {
-      const arrayBars = document.getElementsByClassName("array-bar");
-      if (animations[i][2] === "changed") {
-        setTimeout(() => {
-          const [barOneIdx, newHeight] = animations[i];
+    console.log(animations, sortedArr);
+    try {
+      for (let i = 0; i < animations.length; i++) {
+        const arrayBars = document.getElementsByClassName("array-bar");
+        if (animations[i][2] === "changed") {
+          setTimeout(() => {
+            const [barOneIdx, newHeight] = animations[i];
+            const barOneStyle = arrayBars[barOneIdx].style;
+            barOneStyle.height = `${newHeight * barHeightProPortion}px`;
+          }, i * ANIMATION_SPEED_MS);
+        } else {
+          const arrayBars = document.getElementsByClassName("array-bar");
+          const [barOneIdx, barTwoIdx] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
-          barOneStyle.height = `${newHeight * barHeightProPortion}px`;
-        }, i * ANIMATION_SPEED_MS);
-      } else {
-        const [barOneIdx, barTwoIdx] = animations[i];
-        const barOneStyle = arrayBars[barOneIdx].style;
-        const barTwoStyle = arrayBars[barTwoIdx].style;
-        const color =
-          animations[i][2] === "after" ? SECONDARY_COLOR : PRIMARY_COLOR;
-        setTimeout(() => {
-          barOneStyle.backgroundColor = color;
-          barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+          const barTwoStyle = arrayBars[barTwoIdx].style;
+          const color =
+            animations[i][2] === "after" ? SECONDARY_COLOR : PRIMARY_COLOR;
+          setTimeout(() => {
+            barOneStyle.backgroundColor = color;
+            barTwoStyle.backgroundColor = color;
+          }, i * ANIMATION_SPEED_MS);
+        }
       }
+    } catch {
+      console.log(
+        "inplace quick를 사용하기 때문에 위치 바꿀때 에러나는경우가 있다"
+      );
     }
   };
 
@@ -231,9 +215,11 @@ function App() {
         onQuickClick={onQuickSort}
         onSelectionClick={onSelectionSort}
         onInsertionClick={onInsertionSort}
-        onTestClick={test}
+        onChangeRange={makeArray}
+        choosedSize={choosedSize}
+        nowSorting={nowSorting}
       />
-      <Main arr={arr} currentIdx={currentIdx} nextIdx={nextIdx} />
+      <Main arr={arr} />
     </div>
   );
 }

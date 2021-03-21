@@ -11,7 +11,7 @@ function selectionSort(stack, animations) {
     let minNumberIdx = i;
     //오직 정렬되지 않은 배열에서만 탐색하기 위해서 j를 i + 1로 설정한다.
     for (let j = minNumberIdx + 1; j < stack.length; j++) {
-      animations.push([minNumberIdx, j, "before"]);
+      animations.push([minNumberIdx, j, "same"]);
       animations.push([minNumberIdx, j, "same"]);
       animations.push([minNumberIdx, j, "before"]);
       if (stack[minNumberIdx] > stack[j]) {
@@ -21,9 +21,12 @@ function selectionSort(stack, animations) {
     //swap
     if (minNumberIdx !== i) {
       swap(stack, minNumberIdx, i);
-
       animations.push([minNumberIdx, stack[minNumberIdx], "changed"]);
       animations.push([i, stack[i], "changed"]);
+
+      // animations.push([i, i, "same"]);
+      // animations.push([i, i, "same"]);
+      // animations.push([i, i, "before"]);
     }
   }
   return stack;

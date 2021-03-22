@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import { useState } from "react";
 
 const Header = ({
-  rangeChange,
   makeRandomArray,
   onBubbleClick,
   onMergeClick,
@@ -15,66 +14,60 @@ const Header = ({
   onInsertionClick,
   onChangeRange,
   choosedSize,
+  choosedSpeed,
   nowSorting,
+  onChangeSpeed,
+  setChoosedSize,
 }) => {
   const [value, setValue] = useState(choosedSize);
-  const handleSliderChange = (event, newValue) => {
-    setValue(newValue);
-    onChangeRange(value);
-  };
+  const [speed, setSpeed] = useState(choosedSpeed);
 
-  const buttonTest = () => {
-    console.log("test");
+  const handleSliderChange = (event, newValue) => {
+    //쓰로틀링
+    let timer;
+    if (!timer) {
+      timer = setTimeout(() => {
+        timer = null;
+        setValue(newValue);
+        setChoosedSize(newValue);
+        onChangeRange(value);
+      }, 50);
+    }
+  };
+  const handleSpeedChange = (event, newValue) => {
+    setSpeed(newValue);
+    onChangeSpeed(150 - newValue + 1);
   };
 
   return (
     <Wrapper>
       <Title>Sorting Visualization</Title>
       <RangeWrapper>
-        <Typography gutterBottom>Length</Typography>
+        <Typography className="typo">Length</Typography>
         <Slider
           min={10}
           max={150}
           value={typeof value === "number" ? value : 0}
           onChange={handleSliderChange}
+          className="slider"
         />
       </RangeWrapper>
-      <button className="buttonTest" onClick={buttonTest} disabled={nowSorting}>
-        테스트
-      </button>
-      <Button onClick={makeRandomArray} disabled={true}>
-        새 배열
-      </Button>
-      <Button onClick={rangeChange}>범위 선택</Button>
+      <RangeWrapper>
+        <Typography className="typo">Speed</Typography>
+        <Slider
+          min={1}
+          max={150}
+          value={typeof speed === "number" ? speed : 0}
+          onChange={handleSpeedChange}
+          className="slider"
+        />
+      </RangeWrapper>
+      <Button onClick={makeRandomArray}>랜덤 배열</Button>
       <Button onClick={onMergeClick}>Merge Sort</Button>
       <Button onClick={onQuickClick}>Quick Sort</Button>
       <Button onClick={onSelectionClick}>Selection Sort</Button>
       <Button onClick={onBubbleClick}>Bubble Sort</Button>
       <Button onClick={onInsertionClick}>Insertion Sort</Button>
-      <select name="choice">
-        <option value="first" selected>
-          10
-        </option>
-        <option value="second">20</option>
-        <option value="third">30</option>
-        <option value="second">40</option>
-        <option value="third">50</option>
-        <option value="second">60</option>
-        <option value="third">70</option>
-        <option value="second">80</option>
-        <option value="third">90</option>
-        <option value="second">100</option>
-        <option value="third">110</option>
-        <option value="second">120</option>
-        <option value="third">130</option>
-        <option value="second">140</option>
-        <option value="third">150</option>
-        <option value="second">160</option>
-        <option value="third">170</option>
-        <option value="second">180</option>
-        <option value="third">190</option>
-        <option value="second">200</option>
-      </select>
     </Wrapper>
   );
 };
@@ -88,12 +81,17 @@ const Title = styled.p`
 `;
 
 const Button = styled.p`
-  color: #fff;
-  cursor: pointer;
-  font-size: 15px;
-  font-family: Arial, Helvetica, sans-serif;
+  all: unset;
+  color: white;
+  transition: 0.2s;
+  border-radius: 30px;
+  box-sizing: border-box;
+  padding: 7px;
   &:hover {
-    color: gray;
+    color: black;
+    background: #fff;
+    box-shadow: 0 0 10px #fff, 0 0 40px #fff, 0 0 80px #fff;
+    cursor: pointer;
   }
 `;
 
@@ -107,23 +105,22 @@ const Wrapper = styled.div`
   width: 100%;
   background-color: rgba(0, 0, 0, 0.25);
   box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.33);
-  .buttonTest {
-    all: unset;
-    color: #fff;
-    background-color: ${(props) =>
-      props.nowSorting === true ? "red" : "black"};
-    border: none;
-    cursor: pointer;
-    font-size: 15px;
-    font-family: Arial, Helvetica, sans-serif;
-    &:hover {
-      color: gray;
-    }
-  }
 `;
 
 const RangeWrapper = styled.div`
   width: 200px;
   align-content: center;
   justify-content: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  .slider {
+    padding: 0px;
+    color: yellow;
+  }
+
+  .typo {
+    color: yellow;
+  }
 `;

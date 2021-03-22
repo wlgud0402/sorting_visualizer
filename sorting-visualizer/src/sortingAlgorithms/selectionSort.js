@@ -21,12 +21,10 @@ function selectionSort(stack, animations) {
     //swap
     if (minNumberIdx !== i) {
       swap(stack, minNumberIdx, i);
+      animations.push([minNumberIdx, i, "same"]);
       animations.push([minNumberIdx, stack[minNumberIdx], "changed"]);
       animations.push([i, stack[i], "changed"]);
-
-      // animations.push([i, i, "same"]);
-      // animations.push([i, i, "same"]);
-      // animations.push([i, i, "before"]);
+      animations.push([minNumberIdx, i, "before"]);
     }
   }
   return stack;

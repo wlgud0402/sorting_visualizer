@@ -1,5 +1,3 @@
-import { sleep } from "../helper/sleep.js";
-
 export function getQuickSort(array) {
   let animations = [];
   let dupArray = array.slice();
@@ -13,10 +11,7 @@ export function quickSort(arr, animations) {
   stack.push(0);
   stack.push(arr.length - 1);
 
-  // There isn't an explicit peek() function
-  // The loop repeats as long as we have unsorted subarrays
   while (stack[stack.length - 1] >= 0) {
-    // Extracting the top unsorted subarray
     let end = stack.pop();
     let start = stack.pop();
     animations.push([start, end, "after"]);
@@ -49,19 +44,23 @@ function partition(arr, start, end, animations) {
   for (let i = start; i < end; i++) {
     if (arr[i] < pivotValue) {
       animations.push([pivotIndex, i, "after"]);
-      animations.push([pivotIndex, i, "after"]);
-      animations.push([pivotIndex, i, "before"]);
+      // animations.push([pivotIndex, i, "after"]);
       swap(arr, pivotIndex, i);
       animations.push([i, arr[i], "changed"]);
       animations.push([pivotIndex, arr[pivotIndex], "changed"]);
+      animations.push([pivotIndex, i, "before"]);
       pivotIndex++;
     }
   }
 
   // pivot값을 가운데로
   swap(arr, pivotIndex, end);
+  animations.push([pivotIndex, end, "after"]);
+  // animations.push([pivotIndex, end, "after"]);
   animations.push([pivotIndex, arr[pivotIndex], "changed"]);
   animations.push([end, arr[end], "changed"]);
+  animations.push([pivotIndex, end, "before"]);
+
   return pivotIndex;
 }
 

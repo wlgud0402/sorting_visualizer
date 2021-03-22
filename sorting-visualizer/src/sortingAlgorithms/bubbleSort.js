@@ -11,14 +11,14 @@ function bubbleSort(stack, animations) {
   for (let i = 0; i < N - 1; i++) {
     for (let j = 0; j < N - i - 1; j++) {
       animations.push([j, j + 1, "same"]);
-      animations.push([j, j + 1, "same"]);
-      animations.push([j, j + 1, "before"]);
-
       if (stack[j] > stack[j + 1]) {
+        animations.push([j, j + 1, "same"]);
         animations.push([j, stack[j + 1], "changed"]);
         animations.push([j + 1, stack[j], "changed"]);
+        animations.push([j, j + 1, "before"]);
         swap(stack, j, j + 1);
       }
+      animations.push([j, j + 1, "before"]);
     }
   }
 }

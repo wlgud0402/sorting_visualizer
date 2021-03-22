@@ -9,14 +9,15 @@ import { getInsertionSort } from "./sortingAlgorithms/insertionSort.js";
 import { getQuickSort } from "./sortingAlgorithms/quickSort.js";
 
 function App() {
-  const ANIMATION_SPEED_MS = 10;
-  const PRIMARY_COLOR = "greenyellow";
+  // const choosedSpeed = 10;
+  const PRIMARY_COLOR = "turquoise"; //greenyellow
   const SECONDARY_COLOR = "red";
   const [nowSorting, setNowSorting] = useState(false);
 
   const firstSize = 10;
   const [arr, setArr] = useState([]);
   const [choosedSize, setChoosedSize] = useState(10);
+  const [choosedSpeed, setChoosedSpeed] = useState(50);
 
   const screen = window.screen;
   const barHeightProPortion = (screen.height * 0.7) / arr.length;
@@ -30,23 +31,13 @@ function App() {
   //   setNowSorting(nowSorting);
   //   console.log("바뀜", nowSorting);
   // }, [nowSorting]);
+  const onChangeSpeed = (speed) => {
+    setChoosedSpeed(speed);
+  };
 
   //선택된 범위를 재사용해서 새로 다시 섞인 배열 생성
   const makeRandomArray = () => {
     makeArray(choosedSize);
-  };
-
-  //범위를 선택후 이를 적용시킴
-  const rangeChange = () => {
-    const range = prompt("5~250까지 입력하실수 있습니다.");
-    if (range > 4 && range < 251) {
-      makeArray(range);
-      setChoosedSize(range);
-    } else {
-      alert("올바르지 않은 범위입니다.");
-      makeArray(10);
-      return;
-    }
   };
 
   //범위를 입력받은후 그만큼 크기의 배열생성, 섞기위해 shuffleArray 호출
@@ -80,7 +71,7 @@ function App() {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${newHeight * barHeightProPortion}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * choosedSpeed);
       } else {
         const [barOneIdx, barTwoIdx] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
@@ -90,7 +81,7 @@ function App() {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * choosedSpeed);
       }
     }
     // setNowSorting(false);
@@ -111,13 +102,13 @@ function App() {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * choosedSpeed);
       } else {
         setTimeout(() => {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${newHeight * barHeightProPortion}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * choosedSpeed);
       }
     }
   };
@@ -132,7 +123,7 @@ function App() {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${newHeight * barHeightProPortion}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * choosedSpeed);
       } else {
         const [barOneIdx, barTwoIdx] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
@@ -142,7 +133,7 @@ function App() {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * choosedSpeed);
       }
     }
   };
@@ -157,7 +148,7 @@ function App() {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${newHeight * barHeightProPortion}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * choosedSpeed);
       } else {
         const [barOneIdx, barTwoIdx] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
@@ -167,7 +158,7 @@ function App() {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * choosedSpeed);
       }
     }
   };
@@ -175,39 +166,32 @@ function App() {
   //퀵정렬
   const onQuickSort = () => {
     const [animations, sortedArr] = getQuickSort(arr);
-    try {
-      for (let i = 0; i < animations.length; i++) {
-        const arrayBars = document.getElementsByClassName("array-bar");
-        if (animations[i][2] === "changed") {
-          setTimeout(() => {
-            const [barOneIdx, newHeight] = animations[i];
-            const barOneStyle = arrayBars[barOneIdx].style;
-            barOneStyle.height = `${newHeight * barHeightProPortion}px`;
-          }, i * ANIMATION_SPEED_MS);
-        } else {
-          const arrayBars = document.getElementsByClassName("array-bar");
-          const [barOneIdx, barTwoIdx] = animations[i];
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName("array-bar");
+      if (animations[i][2] === "changed") {
+        setTimeout(() => {
+          const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
-          const barTwoStyle = arrayBars[barTwoIdx].style;
-          const color =
-            animations[i][2] === "after" ? SECONDARY_COLOR : PRIMARY_COLOR;
-          setTimeout(() => {
-            barOneStyle.backgroundColor = color;
-            barTwoStyle.backgroundColor = color;
-          }, i * ANIMATION_SPEED_MS);
-        }
+          barOneStyle.height = `${newHeight * barHeightProPortion}px`;
+        }, i * choosedSpeed);
+      } else {
+        const arrayBars = document.getElementsByClassName("array-bar");
+        const [barOneIdx, barTwoIdx] = animations[i];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        const color =
+          animations[i][2] === "after" ? SECONDARY_COLOR : PRIMARY_COLOR;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * choosedSpeed);
       }
-    } catch {
-      console.log(
-        "inplace quick를 사용하기 때문에 위치 바꿀때 에러나는경우가 있다"
-      );
     }
   };
 
   return (
     <div className="App">
       <Header
-        rangeChange={rangeChange}
         makeRandomArray={makeRandomArray}
         onBubbleClick={onBubbleSort}
         onMergeClick={onMergeSort}
@@ -215,8 +199,11 @@ function App() {
         onSelectionClick={onSelectionSort}
         onInsertionClick={onInsertionSort}
         onChangeRange={makeArray}
+        onChangeSpeed={onChangeSpeed}
         choosedSize={choosedSize}
+        choosedSpeed={choosedSpeed}
         nowSorting={nowSorting}
+        setChoosedSize={setChoosedSize}
       />
       <Main arr={arr} />
     </div>

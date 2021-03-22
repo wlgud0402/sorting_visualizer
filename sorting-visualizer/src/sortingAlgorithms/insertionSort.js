@@ -12,18 +12,16 @@ function insertionSort(stack, animations) {
     for (let j = i - 1; j > -1; j--) {
       animations.push([i, j, "same"]);
       animations.push([i, j, "same"]);
-      animations.push([i, j, "before"]);
-
       if (stack[j + 1] < stack[j]) {
         //값의 위치가 바뀐다
         swap(stack, j + 1, j);
+        animations.push([j, j + 1, "same"]);
         animations.push([j, stack[j], "changed"]);
         animations.push([j + 1, stack[j + 1], "changed"]);
-        animations.push([j, j + 1, "same"]);
-        animations.push([j, j + 1, "same"]);
         animations.push([j, j + 1, "before"]);
         //바뀌지 않는다
       }
+      animations.push([i, j, "before"]);
     }
   }
 }

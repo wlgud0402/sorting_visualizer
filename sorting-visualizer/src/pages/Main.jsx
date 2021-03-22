@@ -51,6 +51,10 @@ const Bar = styled.div`
   height: ${(props) => props.height};
   background-color: turquoise;
   margin-right: 2px;
+  /* transition: all ease-in 0.5s;
+  &:hover {
+    background-color: black;
+  } */
 `;
 
 const Step = styled.div`
@@ -66,10 +70,4 @@ const Step = styled.div`
     margin: 0px;
     margin-bottom: 10px;
   }
-  /* align-items: center;
-  width: 100%;
-  height: 50px;
-  color: white;
-  border-top: 1px solid white;
-  justify-content: center; */
 `;

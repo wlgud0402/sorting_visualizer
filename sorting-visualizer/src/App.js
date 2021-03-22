@@ -10,9 +10,9 @@ import { getQuickSort } from "./sortingAlgorithms/quickSort.js";
 
 function App() {
   const ANIMATION_SPEED_MS = 10;
-  const PRIMARY_COLOR = "turquoise";
+  const PRIMARY_COLOR = "greenyellow";
   const SECONDARY_COLOR = "red";
-  const [nowSorting, setNowSorting] = useState("false");
+  const [nowSorting, setNowSorting] = useState(false);
 
   const firstSize = 10;
   const [arr, setArr] = useState([]);
@@ -26,10 +26,10 @@ function App() {
     makeArray(firstSize);
   }, []);
 
-  useEffect(() => {
-    setNowSorting(nowSorting);
-    console.log("바뀜", nowSorting);
-  }, [nowSorting]);
+  // useEffect(() => {
+  //   setNowSorting(nowSorting);
+  //   console.log("바뀜", nowSorting);
+  // }, [nowSorting]);
 
   //선택된 범위를 재사용해서 새로 다시 섞인 배열 생성
   const makeRandomArray = () => {
@@ -70,7 +70,7 @@ function App() {
   //거품정렬
   const onBubbleSort = async () => {
     console.log("솔팅시전", nowSorting);
-    setNowSorting("true");
+    setNowSorting(true);
     console.log("솔팅시작눌렀어", nowSorting);
     const [animations, sortedArray] = getBubbleSort(arr);
     for (let i = 0; i < animations.length; i++) {
@@ -93,11 +93,13 @@ function App() {
         }, i * ANIMATION_SPEED_MS);
       }
     }
+    // setNowSorting(false);
+    // console.log(nowSorting);
   };
 
   //병합정렬
   const onMergeSort = async () => {
-    const animations = getMergeSort(arr);
+    const [animations, sortedArray] = getMergeSort(arr);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
       const isColorChange = i % 3 !== 2;
@@ -114,7 +116,6 @@ function App() {
         setTimeout(() => {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
-          // barStyle.height = `${newHeight * barHeightProPortion}px`;
           barOneStyle.height = `${newHeight * barHeightProPortion}px`;
         }, i * ANIMATION_SPEED_MS);
       }
@@ -124,7 +125,6 @@ function App() {
   //선택정렬
   const onSelectionSort = async () => {
     let [animations, afterSortedArray] = getSelectionSort(arr);
-    console.log(animations, afterSortedArray);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
       if (animations[i][2] === "changed") {
@@ -175,7 +175,6 @@ function App() {
   //퀵정렬
   const onQuickSort = () => {
     const [animations, sortedArr] = getQuickSort(arr);
-    console.log(animations, sortedArr);
     try {
       for (let i = 0; i < animations.length; i++) {
         const arrayBars = document.getElementsByClassName("array-bar");

@@ -15,13 +15,11 @@ export function quickSort(arr, animations) {
     let end = stack.pop();
     let start = stack.pop();
     animations.push([start, end, "after"]);
-    animations.push([start, end, "after"]);
     animations.push([start, end, "before"]);
 
     let pivotIndex = partition(arr, start, end, animations);
-    animations.push([pivotIndex, pivotIndex, "after"]);
-    animations.push([pivotIndex, pivotIndex, "after"]);
-    animations.push([pivotIndex, pivotIndex, "before"]);
+    animations.push([pivotIndex, pivotIndex, "pivot"]);
+    // animations.push([pivotIndex, pivotIndex, "before"]);
 
     // pivot보다 왼쪽에 있는 것들은 나중에 정렬하기 위해 stack에 추가
     if (pivotIndex - 1 > start) {

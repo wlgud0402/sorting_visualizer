@@ -91,26 +91,48 @@ function App() {
   //병합정렬
   const onMergeSort = async () => {
     const [animations, sortedArray] = getMergeSort(arr);
+    console.log(animations, sortedArray);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
-      const isColorChange = i % 3 !== 2;
-      if (isColorChange) {
-        const [barOneIdx, barTwoIdx] = animations[i];
-        const barOneStyle = arrayBars[barOneIdx].style;
-        const barTwoStyle = arrayBars[barTwoIdx].style;
-        const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
-        setTimeout(() => {
-          barOneStyle.backgroundColor = color;
-          barTwoStyle.backgroundColor = color;
-        }, i * choosedSpeed);
-      } else {
+      if (animations[i][2] === "changed") {
         setTimeout(() => {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${newHeight * barHeightProPortion}px`;
         }, i * choosedSpeed);
+      } else {
+        const [barOneIdx, barTwoIdx] = animations[i];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        const color =
+          animations[i][2] === "after" ? SECONDARY_COLOR : PRIMARY_COLOR;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * choosedSpeed);
       }
     }
+
+    // for (let i = 0; i < animations.length; i++) {
+    //   const arrayBars = document.getElementsByClassName("array-bar");
+    //   const isColorChange = i % 3 !== 2;
+    //   if (isColorChange) {
+    //     const [barOneIdx, barTwoIdx] = animations[i];
+    //     const barOneStyle = arrayBars[barOneIdx].style;
+    //     const barTwoStyle = arrayBars[barTwoIdx].style;
+    //     const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+    //     setTimeout(() => {
+    //       barOneStyle.backgroundColor = color;
+    //       barTwoStyle.backgroundColor = color;
+    //     }, i * choosedSpeed);
+    //   } else {
+    //     setTimeout(() => {
+    //       const [barOneIdx, newHeight] = animations[i];
+    //       const barOneStyle = arrayBars[barOneIdx].style;
+    //       barOneStyle.height = `${newHeight * barHeightProPortion}px`;
+    //     }, i * choosedSpeed);
+    //   }
+    // }
   };
 
   //선택정렬
